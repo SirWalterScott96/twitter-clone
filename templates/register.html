@@ -30,22 +30,42 @@
 					<h2 class="text-center bold">Join Eng@ge! today.</h2>
 
 					<br />
-					<form action="{{ url_for('register')}}" method="post">
+					<form action="{{ url_for('register')}}" method="post" enctype="multipart/form-data">
 					{{ form.csrf_token }}
 					<div class="form-group">
 						{{ form.name(class='form-control', placeholder='Enter your full name') }}
+						<ul>
+							{% for error in form.name.errors %}
+                            	<li style="color: red">{{ error }}</li>
+                            {% endfor %}
+						</ul>
 					</div>
 
 					<div class="form-group">
 						{{ form.username(class='form-control', placeholder='Enter your username') }}
+						<ul>
+							{% for error in form.username.errors %}
+                            	<li style="color: red">{{ error }}</li>
+                            {% endfor %}
+						</ul>
 					</div>
 
 					<div class="form-group">
 						{{ form.password(class='form-control', placeholder='Enter your password') }}
+						<ul>
+							{% for error in form.password.errors %}
+                            	<li style="color: red">{{ error }}</li>
+                            {% endfor %}
+						</ul>
 					</div>
 
 					<div class="form-group">
 						{{ form.image(class='form-control-file') }}
+						<ul>
+							{% for error in form.image.errors %}
+                            	<li style="color: red">{{ error }}</li>
+                            {% endfor %}
+						</ul>
 					</div>
 
 					{{ form.submit(class='btn btn-danger btn-block') }}
