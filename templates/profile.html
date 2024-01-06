@@ -50,33 +50,37 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<h3 class="text-center bold">My Profile</h3>
+                    {% if current_user == user %}
+					    <h3 class="text-center bold">My Profile</h3>
+                    {% elif current_user != user %}
+                        <h3 class="text-center bold">Profile</h3>
+                    {% endif %}
 				</div>
 				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<div class="row pad">
 								<div class="col-lg-12">
-									<img src="{{ current_user.image }}" class="img-responsive img-circle center-block" alt="Image" style="height: 220px;" />
+									<img src="{{ url_for('static', filename=user.image) }}" class="img-responsive img-circle center-block" alt="Image" style="height: 220px;" />
 								</div>
 							</div>
 						</div>
 						<ul class="list-group">
 							<li class="list-group-item">
 								<i class="glyphicon glyphicon-user"></i> NAME: 
-								<strong class="pull-right">{{ current_user.name }}</strong>
+								<strong class="pull-right">{{ user.name }}</strong>
 							</li>
 							<li class="list-group-item">
 								<i class="glyphicon glyphicon-th"></i> Handle: 
-								<strong class="pull-right"><em>@{{ current_user.username }}</em></strong>
+								<strong class="pull-right"><em>@{{ user.username }}</em></strong>
 							</li>
 							<li class="list-group-item">
 								<i class="glyphicon glyphicon-calendar"></i> MEMBER SINCE: 
-								<strong class="pull-right">{{ current_user.join_date.strftime('%B %d, %Y') }}</strong>
+								<strong class="pull-right">{{ user.join_date.strftime('%B %d, %Y') }}</strong>
 							</li>
 							<li class="list-group-item">
 								<i class="glyphicon glyphicon-th-list"></i> FOLLOWERS COUNT: 
-								<strong class="pull-right">300</strong>
+								<strong class="pull-right">{{ followed_by|length }}</strong>
 							</li>
 						</ul>
 					</div>
@@ -100,80 +104,46 @@
 								<!-- Tab panes -->
 								<div class="tab-content">
 									<div role="tabpanel" class="tab-pane active" id="tweets">
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="row pad">
-													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
-													</div>
-													<div class="col-lg-10">
-														<div>
-															<strong class="mid">Miranda Cavendish</strong> 
-															<small><em>@mirandaCAV</em></small> . 
-															July 5
-														</div>
-														<div class="pad">
-															Yesterday was the best <a href="#">#fourthOfJuly</a> celebration of my life.
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="row pad">
-													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
-													</div>
-													<div class="col-lg-10">
-														<div>
-															<strong class="mid">Miranda Cavendish</strong> 
-															<small><em>@mirandaCAV</em></small> . 
-															July 5
-														</div>
-														<div class="pad">
-															Had fun with my family last night. <a href="#">#fourthOfJuly</a>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="row pad">
-													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
-													</div>
-													<div class="col-lg-10">
-														<div>
-															<strong class="mid">Miranda Cavendish</strong> 
-															<small><em>@mirandaCAV</em></small> . 
-															July 5
-														</div>
-														<div class="pad">
-															<a href="#">#fourthOfJuly</a> party is officially on!!!
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
+                                        {% for tweet in user.tweet %}
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="row pad">
+                                                        <div class="col-lg-2">
+                                                            <img src="{{url_for('static', filename=user.image)}}" class="img-circle" style="width: 60px; height: 60px;" />
+                                                        </div>
+                                                        <div class="col-lg-10">
+                                                            <div>
+                                                                <strong class="mid">{{ user.name }}</strong>
+                                                                <small><em>@{{ user.username }}</em></small> .
+                                                                {{ tweet.date_created.strftime('%d %B') }}
+                                                            </div>
+                                                            <div class="pad">
+                                                                {{ tweet.text }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
 									</div>
 									<div role="tabpanel" class="tab-pane" id="followings">
+                                        {% for follower in followed_by %}
 										<div class="row">
 											<div class="col-lg-12">
 												<div class="row pad">
 													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
+														<img src="{{url_for('static', filename=follower.image)}}" class="img-circle" style="width: 60px; height: 60px;" />
 													</div>
 													<div class="col-lg-10">
 														<div>
-															<strong class="mid">May Joanna</strong> 
-															<small><em>@real_mayJoanna</em></small>
+															<strong class="mid">{{ follower.name }}</strong>
+															<small><em>@{{ follower.username }}</em></small>
 														</div>
 														<div class="row pad">
 															<hr />
 															<div class="col-lg-12">
-																<i class="glyphicon glyphicon-th-list"></i> 400,000
+																<i class="glyphicon glyphicon-th-list"></i> {{ follower.followed_by.all()|length }}
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 															</div>
 														</div>
@@ -181,72 +151,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="row pad">
-													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
-													</div>
-													<div class="col-lg-10">
-														<div>
-															<strong class="mid">Tracy Morgan</strong> 
-															<small><em>@tMorgan</em></small>
-														</div>
-														<div class="row pad">
-															<hr />
-															<div class="col-lg-12">
-																<i class="glyphicon glyphicon-th-list"></i> 195,565
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="row pad">
-													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
-													</div>
-													<div class="col-lg-10">
-														<div>
-															<strong class="mid">Sameen Grooves</strong> 
-															<small><em>@sameenGrooves</em></small>
-														</div>
-														<div class="row pad">
-															<hr />
-															<div class="col-lg-12">
-																<i class="glyphicon glyphicon-th-list"></i> 233,267
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="row pad">
-													<div class="col-lg-2">
-														<img src="{{url_for('static', filename='imgs/anonymous.png')}}" class="img-circle" style="width: 60px; height: 60px;" />
-													</div>
-													<div class="col-lg-10">
-														<div>
-															<strong class="mid">Joss Ingram</strong> 
-															<small><em>@jIngramJ</em></small>
-														</div>
-														<div class="row pad">
-															<hr />
-															<div class="col-lg-12">
-																<i class="glyphicon glyphicon-th-list"></i> 1,060,056
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
+                                        {% endfor %}
 									</div>
 								</div>
 							</div>

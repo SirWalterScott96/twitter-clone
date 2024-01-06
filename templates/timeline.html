@@ -58,14 +58,14 @@
 						<div class="panel-body">
 							<div class="row pad">
 								<div class="col-lg-12">
-									<img src="{{ current_user.image }}" class="img-responsive img-circle center-block" alt="Image" width="150px"/>
+									<img src="{{ url_for('static', filename=user.image) }}" class="img-responsive img-circle center-block" alt="Image" width="150px"/>
 								</div>
 							</div>
 							<div class="row pad">
 								<div class="col-lg-4 col-lg-offset-2 text-center">
 									<strong>
 										Tweets <br />
-										56 
+										{{ tweets|count }}
 									</strong> 
 								</div>
 								<div class="col-lg-4 text-center">
@@ -84,6 +84,7 @@
 					</div>
 				</div>
 
+
 				<div class="col-lg-6">
 					<div class="panel panel-default">
 						<div class="panel-body">
@@ -94,13 +95,12 @@
 											<div class="caption">
 												<div class="row">
 													<div class="col-lg-10">
-														<!-- <i class="glyphicon glyphicon-user"></i>  -->
-														<img src="{{ current_user.image }}" style="width: 30px; height: 30px;" class="img-circle">
-														<strong>{{ current_user.name }}</strong>
-														<small><em>@{{ current_user.username }}</em></small>
+														<img src="{{ url_for('static', filename=user.image) }}" style="width: 30px; height: 30px;" class="img-circle">
+														<strong>{{ user.name }}</strong>
+														<small><em>@{{ user.username }}</em></small>
 													</div>
 													<div class="col-lg-2 text-right">
-														15m
+														{{ (current_time - tweet.date_created)|time_since }}
 													</div>
 												</div>
 												<div class="row pad">
@@ -113,99 +113,103 @@
 									</div>
 								</div>
 							{% endfor %}
+                        </div>
+                    </div>
+                </div>
 
-				<div class="col-lg-3">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h3>Who To Watch</h3>
-						</div>
-						<ul class="list-group">
-							<li class="list-group-item">
-								The English Premier League 
-								<div>
-									<strong>@theEPL</strong> 
-									<span class="pull-right">
-										3,949,335 Followers
-									</span>
-								</div>
-							</li>
-							<li class="list-group-item">
-								Barclays Bank
-								<div>
-									<strong>@barclarysBank</strong> 
-									<span class="pull-right">
-										3,451 Followers
-									</span>
-								</div>
-							</li>
-							<li class="list-group-item">
-								Leonardo Rumlow
-								<div>
-									<strong>@rummYLEO</strong> 
-									<span class="pull-right">
-										350 Followers
-									</span>
-								</div>
-							</li>
-							<li class="list-group-item">
-								The Cable People
-								<div>
-									<strong>@theCablePeeps</strong> 
-									<span class="pull-right">
-										19,004 Followers
-									</span>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
 
-			<footer>
-				<div class="row pad">
-					<div class="col-lg-12 text-center">
-						Copyright &copy; 2017 <strong> <a href="..">Eng@ge!</a></strong>
-					</div>
-				</div>
-			</footer>
+                <div class="col-lg-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h3>Who To Watch</h3>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                The English Premier League
+                                <div>
+                                    <strong>@theEPL</strong>
+                                    <span class="pull-right">
+                                        3,949,335 Followers
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Barclays Bank
+                                <div>
+                                    <strong>@barclarysBank</strong>
+                                    <span class="pull-right">
+                                        3,451 Followers
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                Leonardo Rumlow
+                                <div>
+                                    <strong>@rummYLEO</strong>
+                                    <span class="pull-right">
+                                        350 Followers
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                The Cable People
+                                <div>
+                                    <strong>@theCablePeeps</strong>
+                                    <span class="pull-right">
+                                        19,004 Followers
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-			<div class="modal fade" id="newPost">
-				<div class="modal-dialog">
-					<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h4 class="modal-title">Post New Message</h4>
-							</div>
-						<form action="{{ url_for('post_tweet') }}" method="post">
-								<div class="modal-body">
-										<div class="row">
-											<div class="col-lg-8 col-lg-offset-2">
-													<div class="form-group">
-														{{ form.csrf_token }}
-														<label>Enter new Eng@ge! post</label>
-														{{ form.text(class="form-control", rows="6", required="required", placeholder="Enter your new message here.") }}
-													</div>
-													<div class="form-group">
-														By posting on our platform, you agree to our <a href="#">Terms and Conditions</a>.
-													</div>
-											</div>
-										</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">
-										<i class="glyphicon glyphicon-ban-circle"></i> Close
-									</button>
-									{{ form.submit(class='btn btn-primary') }}
-								</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+
+                <footer>
+                    <div class="row pad">
+                        <div class="col-lg-12 text-center">
+                            Copyright &copy; 2017 <strong> <a href="..">Eng@ge!</a></strong>
+                        </div>
+                    </div>
+                </footer>
+
+                <div class="modal fade" id="newPost">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Post New Message</h4>
+                                </div>
+                            <form action="{{ url_for('post_tweet') }}" method="post">
+                                    <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-8 col-lg-offset-2">
+                                                        <div class="form-group">
+                                                            {{ form.csrf_token }}
+                                                            <label>Enter new Eng@ge! post</label>
+                                                            {{ form.text(class="form-control", rows="6", required="required", placeholder="Enter your new message here.") }}
+                                                        </div>
+                                                        <div class="form-group">
+                                                            By posting on our platform, you agree to our <a href="#">Terms and Conditions</a>.
+                                                        </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                            <i class="glyphicon glyphicon-ban-circle"></i> Close
+                                        </button>
+                                        {{ form.submit(class='btn btn-primary') }}
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+		    </div>
 
 		<!-- jQuery -->
 		<script src="{{ url_for('static', filename='bs/js/jquery.min.js' )}}"></script>
 		<!-- Bootstrap JavaScript -->
 		<script src="{{ url_for('static', filename='bs/js/bootstrap.min.js') }}"></script>
-	</body>
+    </body>
 </html>
